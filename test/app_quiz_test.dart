@@ -19,7 +19,7 @@ void main() {
 
   testWidgets('Main App interaction', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    
+
     await tester.pumpWidget(ChangeNotifierProvider(
          create: (context) => StateModel(client),
          child: const Quiz(),
@@ -36,7 +36,7 @@ void main() {
     await tester.tap(startFinder);
 
     await tester.pump();
-
+    
     // verify we're on the question screen by text
     final questionFinder = find.text("Question 1");
     expect(questionFinder, findsOneWidget);
@@ -44,6 +44,19 @@ void main() {
     // or by looking for a widget key
     final questionTextFinder = find.byKey(const Key('question-text'));
     expect(questionTextFinder, findsOneWidget);
+
+    //verifies the quiz can be answered and shows results screen
+    for (int i = 0; i < 6; i++) {
+      var answerNumber = 0;
+      final answerButtonFinder = find.byKey(Key('answer-button-${answerNumber++}'));
+      expect(answerButtonFinder, findsAny);
+
+      await tester.tap(answerButtonFinder);
+      await tester.pump();
+    }
+
+    final restartQuizFinder = find.text('Restart Quiz');
+    expect(restartQuizFinder, findsOne);
 
   });
 }
